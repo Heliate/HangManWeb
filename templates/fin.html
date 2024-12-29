@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman - Fin</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background-color: #5cb85c;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {{if .Gagne}}
+            <h1>Félicitations, vous avez gagné !</h1>
+            <p>Votre score : {{.Jeu.Score}}</p>
+            <form action="/continuer" method="POST">
+                <button type="submit">Continuer à jouer</button>
+            </form>
+        {{else}}
+            <h1>Vous avez perdu !</h1>
+            <p>Le mot était : {{.Jeu.MotSecret}}</p>
+        {{end}}
+        <a href="/"><button>Retour à l'accueil</button></a>
+    </div>
+</body>
+</html>

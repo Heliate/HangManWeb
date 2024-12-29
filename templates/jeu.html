@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman - Jeu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+    </style>
+    <script>
+        function dessinerPendu(erreurs) {
+            const canvas = document.getElementById('penduCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Nettoyer
+
+            // Dessiner les étapes
+            if (erreurs >= 1) { // Base
+                ctx.beginPath();
+                ctx.moveTo(20, 180);
+                ctx.lineTo(150, 180);
+                ctx.stroke();
+            }
+            if (erreurs >= 2) { // Poteau vertical
+                ctx.beginPath();
+                ctx.moveTo(50, 180);
+                ctx.lineTo(50, 20);
+                ctx.stroke();
+            }
+            if (erreurs >= 3) { // Poteau horizontal
+                ctx.beginPath();
+                ctx.moveTo(50, 20);
+                ctx.lineTo(120, 20);
+                ctx.stroke();
+            }
+            if (erreurs >= 4) { // Corde
+                ctx.beginPath();
+                ctx.moveTo(120, 20);
+                ctx.lineTo(120, 50);
+                ctx.stroke();
+            }
+            if (erreurs >= 5) { // Tête
+                ctx.beginPath();
+                ctx.arc(120, 70, 10, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            if (erreurs >= 6) { // Corps
+                ctx.beginPath();
+                ctx.moveTo(120, 80);
+                ctx.lineTo(120, 120);
+                ctx.stroke();
+            }
+            if (erreurs >= 7) { // Bras et jambes
+                ctx.beginPath();
+                ctx.moveTo(120, 90); // Bras gauche
+                ctx.lineTo(100, 110);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(120, 90); // Bras droit
+                ctx.lineTo(140, 110);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(120, 120); // Jambe gauche
+                ctx.lineTo(100, 150);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(120, 120); // Jambe droite
+                ctx.lineTo(140, 150);
+                ctx.stroke();
+            }
+        }
+
+        function initPendu(viesRestantes) {
+            dessinerPendu(7 - viesRestantes);
+        }
+    </script>
+</head>
+<body onload="initPendu({{.ViesRestantes}})">
+    <div class="container">
+        <h1>Bonjour {{.Pseudo}}, à vous de jouer !</h1>
+        <canvas id="penduCanvas" width="200" height="200"></canvas>
+        <p>Mot à deviner : {{.MotAffiche}}</p>
+        <p>Lettres essayées : {{range $key, $value := .LettresEssayees}}{{$key}} {{end}}</p>
+        <p>Vies restantes : {{.ViesRestantes}}</p>
+        <form action="/action" method="POST">
+            <input type="text" id="lettre" name="lettre" placeholder="Lettre ou mot" required>
+            <button type="submit">Essayer</button>
+        </form>
+    </div>
+</body>
+</html>
